@@ -9,9 +9,6 @@ class board extends React.Component {
 
     constructor(props){
         super(props);
-        // this.socket=io("http://localhost:5000");
-        if(!this.socket.active){console.log("hiii");}
-        if(this.socket.active){console.log("hi");}
         this.socket.on("canvas-data",function(data){
             var image = new Image();
             var canvas = document.querySelector('#board');
@@ -50,7 +47,20 @@ class board extends React.Component {
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
         ctx.strokeStyle = 'blue';
-    
+        window.addEventListener('resize', function(){
+            var temp_base64ImageData=canvas.toDataURL("image/png");
+            canvas.width = parseInt(sketch_style.getPropertyValue('width'));
+            canvas.height = parseInt(sketch_style.getPropertyValue('height'));
+            var image = new Image();
+            image.onload=function(){
+                ctx.drawImage(image,0,0,canvas.width,canvas.height);
+            };
+            image.src=temp_base64ImageData;
+            ctx.lineWidth = 5;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'blue';
+        });
         canvas.addEventListener('mousedown', function(e) {
             canvas.addEventListener('mousemove', onPaint, false);
         }, false);
