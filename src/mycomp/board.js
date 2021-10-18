@@ -2,7 +2,7 @@ import React from "react";
 import { io } from "socket.io-client";
 import './board.css';
 
-class board extends React.Component {
+class Board extends React.Component {
     timeout;
     socket= io("http://localhost:5000");
     
@@ -92,4 +92,4 @@ class board extends React.Component {
     }
  }
 
-export default board
+export default Board;
