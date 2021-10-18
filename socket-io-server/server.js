@@ -11,7 +11,7 @@ app.use(cors());
 var server = app.listen(port,console.log(`listening on port ${port}`));
 const io = socketIO(server);
 
-let roomId = "";
+
 
 //For storing uids corresponding to a client
 const userSocketidMap = new Map();
@@ -21,17 +21,18 @@ io.on("connection",(socket) => {
     let userName = socket.handshake.query.userName;
     addClient(userName, socket.id);
     socket.on("JOIN_ROOM", (room)=>{
-       roomId = room;
        socket.join(room);
+       console.log(room,userName);
     });
-    socket.on("Chat Message", (message) => {
-        io.to(roomId).emit("New Message", message);
+    socket.on("New Message", (message,roomid) => {
+        console.log(roomid);
+        io.to(roomid).emit("New Message", message);
     });
 
-    socket.on("disconnect",() => {
+    socket.on("disconnect",(roomid) => {
         console.log("Client disconnected!");
         removeClientFromMap(userName, socket.id);
-        io.to(roomId).emit("User disconnectd", socket.id);
+        io.to(roomid).emit("User disconnectd", socket.id);
     });
 });
 

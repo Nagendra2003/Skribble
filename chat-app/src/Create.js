@@ -35,6 +35,7 @@ const InitialPage = () => {
            onChange={(e) => {setRoomId(e.target.value)}}
            > 
            </input>
+           <button> Join Room</button>
            </div>
            }
             <select value={joinRoom} onChange={(e) => {setJoinRoom(e.target.value)}}>
