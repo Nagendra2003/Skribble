@@ -1,6 +1,7 @@
 import React from "react";
 import { io } from "socket.io-client";
 import './board.css';
+import {FaEraser, FaUndo } from 'react-icons/fa';
 
 class board extends React.Component {
     timeout;
@@ -92,7 +93,9 @@ class board extends React.Component {
     };
     render(){
         return(
-        <canvas className="board" id ="board"></canvas>
+            <div>
+                <canvas className="board" id ="board"></canvas>
+            </div>
         )
     }
  }

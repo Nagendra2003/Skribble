@@ -21,7 +21,7 @@ const InitialPage = () => {
             >
             </input>
             <button >
-            Submit
+             Play
             </button>
         </form>
         
