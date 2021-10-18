@@ -9,7 +9,7 @@ export default function Home(props){
         </div>
 
 
-        <Link to="/lobby">Create Lobby</Link>
+        <Link to="/lobby">Play</Link>
 
         </div>
     )
