@@ -1,32 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import { useHistory } from 'react-router-dom';
-import './Home.css';
-
-const InitialPage = () => {
-    const [username, setUsername] = useState('');
-    const history = useHistory();
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        history.push(`/lobby/${username}`);
-    };
-
-    return ( 
-        <div className="initial-page">
-        <h2>Enter Username</h2>
-        <form onSubmit={handleSubmit}>      
-            <input type="text"
-            required
-            value = {username}
-            onChange = {(e) => {setUsername(e.target.value)}}
-            >
-            </input>
-            <button >
-             Play
-            </button>
-        </form>
-        
+import React from 'react'
+import {Link} from "react-router-dom"
+export default function Home(props){
+    return (
+        <div>
+        <div className="mb-3">
+            <label for="Title" className="form-label">Username</label>
+            <input type="text" className="form-control"/>
         </div>
-    );
+
+
+        <Link to="/lobby">Play</Link>
+
+        </div>
+    )
 }
- 
-export default InitialPage;
