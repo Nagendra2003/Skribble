@@ -71,38 +71,6 @@ export default class lobby extends React.Component{
   </Row>
 </Container>
 </div>
-        // <span className="lobby"> 
-        //         <span className="Participants">
-        //             <p>Participants</p>
-        //         </span>
-            
-        //         <span className="Board">
-        //                 <span className="color-picker-container">
-        //                     Select Brush Color : &nbsp; 
-        //                     <input type="color" value={this.state.color} onChange={this.changeColor.bind(this)}/>
-        //                 </span>
-
-        //                 <span className="brushsize-container">
-        //                     Select Brush Size : &nbsp; 
-        //                     <select value={this.state.size} onChange={this.changeSize.bind(this)}>
-        //                         <option> 2 </option>
-        //                         <option> 5 </option>
-        //                         <option> 10 </option>
-        //                         <option> 15 </option>
-        //                         <option> 20 </option>
-        //                         <option> 25 </option>
-        //                         <option> 30 </option>
-        //                     </select>
-        //                 </span>
-        //                 <span className="Eraser">
-        //                 <button type="button" class="btn btn-light" onClick={()=>this.state.color="#00000"}>Eraser</button>
-        //                 </span>
-        //                 <Board color={this.state.color} size={this.state.size}/>
-        //         </span>
-            // <span className="chat-section">
-            //     <Chat/>
-            // </span>
-        // </span>
     )
 }
 }
