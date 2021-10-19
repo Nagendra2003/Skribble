@@ -1,0 +1,31 @@
+.lobby{
+    height: 100%;
+    width: 100% ;
+    background-image: linear-gradient(to bottom right, rgb(110, 240, 84), yellow);
+    padding-top: 2%;
+    position:absolute;
+    text-align: center;
+}
+.Participants{
+    margin-top:15vh;
+    height:70vh;
+    background-color: rgb(194, 153, 153);
+}
+.canvas{
+    height:77vh;
+    margin-top: 3vh;
+    background-color: black;
+}
+.color-picker-container{
+    margin-top:2.5vh;
+    margin-right:10%;
+}
+.brushsize-container{
+    margin-top:2.5vh;
+}
+#chat-section{
+    height: 70vh;
+    margin-top:15vh;
+    background-color: bisque;
+
+}
