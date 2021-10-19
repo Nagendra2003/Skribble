@@ -1,11 +1,12 @@
 import React from "react";
 import { io } from "socket.io-client";
 import './board.css';
+import {FaEraser, FaUndo } from 'react-icons/fa';
 
-class Board extends React.Component {
+class board extends React.Component {
     timeout;
     socket= io("http://localhost:5000");
-    
+    ctx;
 
     constructor(props){
         super(props);
@@ -19,12 +20,17 @@ class Board extends React.Component {
             image.src=data;
         })
     }
+    componentWillReceiveProps(newProps) {
+        this.ctx.strokeStyle = newProps.color;
+        this.ctx.lineWidth = newProps.size;
+    }
     componentDidMount(){
         this.paint();
     }
     paint(){
         var canvas = document.querySelector('#board');
         var ctx = canvas.getContext('2d');
+        this.ctx=ctx;
         var sketch_style = getComputedStyle(canvas);
         canvas.width = parseInt(sketch_style.getPropertyValue('width'));
         canvas.height = parseInt(sketch_style.getPropertyValue('height'));
@@ -43,10 +49,10 @@ class Board extends React.Component {
     
     
         /* Drawing on Paint App */
-        ctx.lineWidth = 5;
+        ctx.lineWidth = this.props.size;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'blue';
+        ctx.strokeStyle = this.props.color;
         window.addEventListener('resize', function(){
             var temp_base64ImageData=canvas.toDataURL("image/png");
             canvas.width = parseInt(sketch_style.getPropertyValue('width'));
@@ -56,10 +62,10 @@ class Board extends React.Component {
                 ctx.drawImage(image,0,0,canvas.width,canvas.height);
             };
             image.src=temp_base64ImageData;
-            ctx.lineWidth = 5;
+            ctx.lineWidth = root.props.size;
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
-            ctx.strokeStyle = 'blue';
+            ctx.strokeStyle = root.props.color;
         });
         canvas.addEventListener('mousedown', function(e) {
             canvas.addEventListener('mousemove', onPaint, false);
@@ -80,16 +86,18 @@ class Board extends React.Component {
             root.timeout=setTimeout(function(){
                 var base64ImageData=canvas.toDataURL("image/png");
                 root.socket.emit("canvas-data",base64ImageData);
-            },10)
+            },50)
 
         };
     
     };
     render(){
         return(
-        <canvas className="board" id ="board"></canvas>
+            <div>
+                <canvas className="board" id ="board"></canvas>
+            </div>
         )
     }
  }
 
-export default Board;
+export default board
