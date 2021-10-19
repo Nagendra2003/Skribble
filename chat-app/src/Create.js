@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {v4 as uuidv4} from 'uuid';
 
+import Button from 'react-bootstrap/Button';
+
 const InitialPage = () => {
     const [username, setUsername] = useState('');
     const [joinRoom, setJoinRoom] = useState("Create Room");
@@ -29,13 +31,13 @@ const InitialPage = () => {
             onChange = {(e) => {setUsername(e.target.value)}}
             >
             </input>
-            {joinRoom === "Create Room" && <button onClick={()=>{console.log("hh")}}> Create Room </button>}
+            {joinRoom === "Create Room" && <Button variant="primary" onClick={handleSubmit}> Create Room </Button>}
            {joinRoom === "Join Room" && <div className="room-id"> <label> Room ID </label><input type="text" 
            required value={roomId} 
            onChange={(e) => {setRoomId(e.target.value)}}
            > 
            </input>
-           <button> Join Room</button>
+           <Button variant="primary" onClick={handleSubmit}> Join Room</Button>
            </div>
            }
             <select value={joinRoom} onChange={(e) => {setJoinRoom(e.target.value)}}>
