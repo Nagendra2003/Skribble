@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import Home from './mycomp/Home'
-import Lobby from './mycomp/Lobby'
+import Lobby from './mycomp/lobby'
 
 import {
   BrowserRouter as Router,Switch,
@@ -16,7 +16,7 @@ function App() {
           <Route exact path="/">
             <Home/>
           </Route>
-          <Route path="/lobby/:username">
+          <Route path="/lobby/:roomid/:username">
             <Lobby />
           </Route>
     </Switch>

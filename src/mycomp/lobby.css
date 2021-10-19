@@ -1,17 +1,31 @@
 .lobby{
     height: 100%;
-    width:100%;
-    background-color: rgb(34, 240, 255);
-    position:fixed;
+    width: 100% ;
+    background-image: linear-gradient(to bottom right, rgb(110, 240, 84), yellow);
+    padding-top: 2%;
+    position:absolute;
+    text-align: center;
 }
-.Board{
-    margin-left: 450px;
-    margin-top: 60px;
-    height:60%;
-    width:40%;
-    background-color: white;
+.Participants{
+    margin-top:25%;
+    height:80%;
+    background-color: rgb(126, 83, 83);
 }
-.tools-section{
-    margin-top: 20px;
-    margin-left:450px
+.canvas{
+    height:400px;
+    margin-top: 7%;
+    background-color: black;
+}
+.color-picker-container{
+    margin-top:5%;
+    margin-right:10%;
+}
+.brushsize-container{
+    margin-top:5%;
+}
+.chat-section{
+    height:80%;
+    margin-top:30%;
+    background-color: bisque;
+
 }

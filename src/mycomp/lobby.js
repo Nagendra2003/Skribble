@@ -1,13 +1,18 @@
 import React from 'react'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Board from '../mycomp/board'
+import Chat from    '../mycomp/chat'
 import './lobby.css'
-import { FaEraser } from 'react-icons/fa';
+import { withRouter } from "react-router";
+
 export default class lobby extends React.Component{
     constructor(props){
         super(props);
         this.state={
             color:"#000000",
-            size:"5"
+            size:"2"
         }
     }
     changeColor(params) {
@@ -23,32 +28,51 @@ export default class lobby extends React.Component{
     }
     render(){
     return (
-        <div className="lobby"> 
-            <div className="tools-section">
-                <div className="color-picker-container">
-                    Select Brush Color : &nbsp; 
-                    <input type="color" value={this.state.color} onChange={this.changeColor.bind(this)}/>
-                </div>
-
-                <div className="brushsize-container">
-                    Select Brush Size : &nbsp; 
-                    <select value={this.state.size} onChange={this.changeSize.bind(this)}>
-                        <option> 5 </option>
-                        <option> 10 </option>
-                        <option> 15 </option>
-                        <option> 20 </option>
-                        <option> 25 </option>
-                        <option> 30 </option>
-                    </select>
-                </div>
-                <button> <FaEraser onClick={() => {this.setState({color: "#fff"})}} /> </button>
-            </div>
-            <div className="Board">
-                <Board color={this.state.color} size={this.state.size} />
-            </div>
-            
-    
+    <div className="lobby">
+    <Container fluid="md">
+    <Row>
+    <Col>
+        <div className="Participants">
+                    <p>Participants</p>
         </div>
+    </Col>
+    <Col xs={6} >
+        <span className="Board">
+            <div>
+                 <span className="color-picker-container">
+                     Select Brush Color : &nbsp; 
+                     <input type="color" value={this.state.color} onChange={this.changeColor.bind(this)}/>
+                 </span>
+
+                 <span className="brushsize-container">
+                     Select Brush Size : &nbsp; 
+                     <select value={this.state.size} onChange={this.changeSize.bind(this)}>
+                         <option> 2 </option>
+                         <option> 5 </option>
+                         <option> 10 </option>
+                         <option> 15 </option>
+                         <option> 20 </option>
+                         <option> 25 </option>
+                         <option> 30 </option>
+                     </select>
+                 </span>
+                 {/* <div className="Eraser">
+                 <button type="button" class="btn btn-light" onClick={()=>this.state.color="#00000"}>Eraser</button>
+                 </div> */}
+                 </div>
+                 <div className="canvas">
+                 <Board color={this.state.color} size={this.state.size}/>
+                 </div>
+         </span>
+    </Col>
+    <Col>
+        <span className="chat-section">
+                <Chat/>
+        </span>
+    </Col>
+  </Row>
+</Container>
+</div>
     )
 }
 }

@@ -9,8 +9,11 @@ var io=require('socket.io')(http,{
 
 io.on("connection",(socket)=>{
     console.log("user online");
-    socket.on('canvas-data',(data)=>{
-        socket.broadcast.emit('canvas-data',data);
+    socket.on("JOIN ROOM",(roomid)=>{
+        socket.join(roomid);
+    });
+    socket.on('canvas-data',(data,roomid)=>{
+        socket.broadcast.to(roomid).emit('canvas-data',data);
 
     })
     socket.on("disconnect", () => {

@@ -1,7 +1,9 @@
 import React from "react";
 import { io } from "socket.io-client";
 import './board.css';
-import {FaEraser, FaUndo } from 'react-icons/fa';
+import {useState} from 'react';
+
+import { withRouter } from "react-router";
 
 class board extends React.Component {
     timeout;
@@ -10,6 +12,11 @@ class board extends React.Component {
 
     constructor(props){
         super(props);
+        
+        this.state = {
+            username :this.props.match.params.username,
+            roomid :this.props.match.params.roomid,
+        };
         this.socket.on("canvas-data",function(data){
             var image = new Image();
             var canvas = document.querySelector('#board');
@@ -19,12 +26,14 @@ class board extends React.Component {
             };
             image.src=data;
         })
+
     }
     componentWillReceiveProps(newProps) {
         this.ctx.strokeStyle = newProps.color;
         this.ctx.lineWidth = newProps.size;
     }
     componentDidMount(){
+        this.socket.emit("JOIN ROOM",this.roomid);
         this.paint();
     }
     paint(){
@@ -85,7 +94,7 @@ class board extends React.Component {
             if(root.timeout !== undefined){clearTimeout(root.timeout);}
             root.timeout=setTimeout(function(){
                 var base64ImageData=canvas.toDataURL("image/png");
-                root.socket.emit("canvas-data",base64ImageData);
+                root.socket.emit("canvas-data",base64ImageData,this.roomid);
             },50)
 
         };
@@ -93,11 +102,9 @@ class board extends React.Component {
     };
     render(){
         return(
-            <div>
-                <canvas className="board" id ="board"></canvas>
-            </div>
+        <canvas className="board" id ="board"></canvas>
         )
     }
  }
 
-export default board
+export default withRouter(board);
