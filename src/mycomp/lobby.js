@@ -2,10 +2,9 @@ import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Board from '../mycomp/board'
-import Chat from    '../mycomp/chat'
-import './lobby.css'
-import { withRouter } from "react-router";
+import Board from '../mycomp/board';
+import Chat from    '../mycomp/chat';
+import './lobby.css';
 
 export default class lobby extends React.Component{
     constructor(props){
@@ -66,13 +65,14 @@ export default class lobby extends React.Component{
          </span>
     </Col>
     <Col>
-        <span className="chat-section">
+        <span className="overflow-auto" id="chat-section">
                 <Chat/>
         </span>
     </Col>
   </Row>
 </Container>
 </div>
+
     )
 }
 }

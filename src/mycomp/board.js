@@ -9,14 +9,15 @@ class board extends React.Component {
     timeout;
     socket= io("http://localhost:5000");
     ctx;
+    username;
+    roomid;
 
     constructor(props){
         super(props);
         
-        this.state = {
-            username :this.props.match.params.username,
-            roomid :this.props.match.params.roomid,
-        };
+
+        this.username =this.props.match.params.username;
+        this.roomid =this.props.match.params.roomid;
         this.socket.on("canvas-data",function(data){
             var image = new Image();
             var canvas = document.querySelector('#board');
@@ -94,7 +95,7 @@ class board extends React.Component {
             if(root.timeout !== undefined){clearTimeout(root.timeout);}
             root.timeout=setTimeout(function(){
                 var base64ImageData=canvas.toDataURL("image/png");
-                root.socket.emit("canvas-data",base64ImageData,this.roomid);
+                root.socket.emit("canvas-data",base64ImageData,root.roomid);
             },50)
 
         };

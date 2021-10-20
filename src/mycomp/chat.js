@@ -27,8 +27,8 @@ const Chat = () => {
 
     const handleSubmit = () => {
         
-        socket.emit("New Message",{userName: username,value},roomid);
-        setValue("");
+        if(value!==""){socket.emit("New Message",{userName: username,value},roomid);
+        setValue("");}
     }
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Chat = () => {
     },[messages]);
 
     return (
-        <div className="chat-section">
+        <div className="overflow-auto" id="chat-section">
             
             <Container fluid className="p-0">
                 <Container className="d-flex flex-column chat-container">
@@ -54,7 +54,7 @@ const Chat = () => {
                     {messages.length>0 && messages.map((message,index) => {
                             return (
                                 
-                                <div className="speech-wrapper" key={index}>
+                                <div className="speech-wrapper">
                                     <div className={`bubble ${message.userName === username ? "" : 'alt'}`}>
                                         <div className="txt">
                                         <p className={`name ${message.userName === username ? "" : 'alt'}`}>{message.userName}</p>
@@ -62,7 +62,7 @@ const Chat = () => {
                                         </div>
                                         <div className={`bubble-arrow ${message.userName === username ? "" : 'alt'}`}></div>
                                     </div>
-{/* 
+                                {/* 
                                     <div className="bubble alt">
                                         <div className="txt">
                                         <p className="name alt">+353 87 1234 567<span> ~ John</span></p>
@@ -83,7 +83,7 @@ const Chat = () => {
                     onChange={(e)=>{setValue(e.target.value)}}
                     >
                     </input>
-                <Button variant="success"
+                <Button variant="primary"
                     onClick={handleSubmit} 
                 >
                     Send

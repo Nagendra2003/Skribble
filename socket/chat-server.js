@@ -14,13 +14,16 @@ const io = socketIO(server);
 
 
 //For storing uids corresponding to a client
-const userSocketidMap = new Map();
+const userSocketidMap= new Map();
+
+const usersRoom = new Map();
 
 io.on("connection",(socket) => {
     console.log("New client connected");  
-    let userName = socket.handshake.query.userName;
+    let userName = socket.handshake.query.username;
     addClient(userName, socket.id);
     socket.on("JOIN_ROOM", (room)=>{
+       addUserToRoom(room,userName);
        socket.join(room);
        console.log(room,userName);
     });
@@ -32,6 +35,7 @@ io.on("connection",(socket) => {
     socket.on("disconnect",(roomid) => {
         console.log("Client disconnected!");
         removeClientFromMap(userName, socket.id);
+        removeUserFromRoom(roomid,userName);
         io.to(roomid).emit("User disconnectd", socket.id);
     });
 });
@@ -55,3 +59,21 @@ const addClient = (userName, socketID) => {
     }
 }
 
+const addUserToRoom = (roomid,username) =>{
+    if (!usersRoom.has(roomid)){
+        usersRoom.set(roomid, new Set([username]));
+    }
+    else{
+        usersRoom.get(roomid).add(username);
+    }
+}
+
+const removeUserFromRoom = (roomid,username) => {
+    if (usersRoom.has(roomid)){
+        let users = usersRoom.get(roomid);
+        users.delete(username);
+        if (users.size == 0){
+            usersRoom.delete(roomid);
+        }
+    }
+}
