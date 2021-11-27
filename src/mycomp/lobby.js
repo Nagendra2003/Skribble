@@ -26,7 +26,7 @@ const Video = (props) => {
     }, []);
 
     return (
-        <Video playInline autoPlay ref={ref} />
+        <video playsInline autoPlay ref={ref} />
     );
 };
 
@@ -76,7 +76,10 @@ const Lobby = () => {
             // }
             // catch(err){ console.log(err);}
             socketRef.current.emit("join room", roomid);
+            console.log("sent signal");
+
             socketRef.current.on("all users", users => {
+                console.log("all users");
                 const peers = [];
                 users.forEach(userID => {
                     const peer = createPeer(userID, socketRef.current.id, stream);
@@ -90,6 +93,7 @@ const Lobby = () => {
             })
 
             socketRef.current.on("user joined", payload => {
+                console.log("user joined");
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
@@ -100,6 +104,7 @@ const Lobby = () => {
             });
 
             socketRef.current.on("receiving returned signal", payload => {
+                console.log("return signal");
                 const item = peersRef.current.find(p => p.peerID === payload.id);
                 item.peer.signal(payload.signal);
             });
@@ -137,7 +142,13 @@ const Lobby = () => {
     }
 
     return <>
-    <div className="lobby">
+    <video muted ref={userVideo} autoPlay playsInline />
+            {peers.map((peer, index) => {
+                return (
+                    <Video key={index} peer={peer} />
+                );
+            })} 
+    {/* <div className="lobby">
     <Container fluid="md">
         <div>
         <Button variant="primary" className="VoiceCall" onClick={() => setModalShow(true)}>
@@ -209,7 +220,7 @@ const Lobby = () => {
     </Col>
   </Row>
 </Container>
-</div>
+</div> */}
 
                  </>
 }
