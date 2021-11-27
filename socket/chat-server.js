@@ -22,11 +22,13 @@ io.on("connection",(socket) => {
     console.log("New client connected");  
     let userName = socket.handshake.query.username;
     addClient(userName, socket.id);
+
     socket.on("JOIN_ROOM", (room)=>{
        addUserToRoom(room,userName);
        socket.join(room);
        console.log(room,userName);
     });
+
     socket.on("New Message", (message,roomid) => {
         console.log(roomid);
         io.to(roomid).emit("New Message", message);
@@ -38,6 +40,7 @@ io.on("connection",(socket) => {
         removeUserFromRoom(roomid,userName);
         io.to(roomid).emit("User disconnectd", socket.id);
     });
+    
 });
 
 const removeClientFromMap = (userName, socketID) => {

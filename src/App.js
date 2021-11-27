@@ -12,14 +12,14 @@ import {
 function App() {
   return (
     <Router>
-    <Switch>
-          <Route exact path="/">
-            <Home/>
-          </Route>
-          <Route path="/lobby/:roomid/:username">
-            <Lobby />
-          </Route>
-    </Switch>
+      <Switch>
+            <Route exact path="/">
+              <Home/>
+            </Route>
+            <Route path="/lobby/:roomid/:username">
+              <Lobby />
+            </Route>
+      </Switch>
     </Router>
   );
 }

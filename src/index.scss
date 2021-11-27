@@ -66,7 +66,7 @@ body{
     overflow-wrap:break-word;
     height: auto;
     display: block;
-    background: #f5f5f5;
+    background: #ffffff;
     border-radius: 4px;
     box-shadow: 2px 8px 5px #000;
     position: relative;
@@ -79,11 +79,11 @@ body{
       .name{
         font-weight: 600;
         font-size: 12px;
-        margin: 0 0 4px;
-        color: #3498db;
+        margin: 0 1px 3px;
+        color: #3c12f7;
         span{
           font-weight: normal;
-          color: #b3b3b3;
+          color: #ffffff;
         }
         &.alt{
           color: #2ecc71;
@@ -92,7 +92,7 @@ body{
       .message{
         font-size: 12px;
         margin: 0;
-        color: #2b2b2b;
+        color: #000000;
       }
       .timestamp{
         font-size: 11px;
@@ -118,7 +118,7 @@ body{
       content: "";
       position: absolute;
       border: 0 solid transparent;
-      border-top: 9px solid #f5f5f5;
+      border-top: 9px solid hsl(0, 0%, 96%);
       border-radius: 0 20px 0;
       width: 15px;
       height: 30px;

@@ -1,7 +1,7 @@
 .lobby{
     height: 100%;
     width: 100% ;
-    background-image: linear-gradient(to bottom right, rgb(110, 240, 84), yellow);
+    background-image: url(../background.jpg);
     padding-top: 2%;
     position:absolute;
     text-align: center;
@@ -14,18 +14,26 @@
 .canvas{
     height:77vh;
     margin-top: 3vh;
-    background-color: black;
+    
 }
 .color-picker-container{
     margin-top:2.5vh;
     margin-right:10%;
+
 }
 .brushsize-container{
     margin-top:2.5vh;
 }
+
 #chat-section{
     height: 70vh;
     margin-top:15vh;
-    background-color: bisque;
+    background-color: rgb(97, 93, 93);
+    background-image: url("../chat-background.jfif");
 
 }
+
+.VoiceCall{
+    margin-left: 1100px;
+}
+

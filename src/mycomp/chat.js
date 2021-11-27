@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 const socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ]});
 
 const Chat = () => {
+    
     const {roomid,username} = useParams();
     
     const [messages, setMessages] = useState([]);
@@ -44,16 +45,14 @@ const Chat = () => {
     },[messages]);
 
     return (
-        <div className="overflow-auto" id="chat-section">
-            
+        <div className="overflow-auto" id="chat-section">      
             <Container fluid className="p-0">
                 <Container className="d-flex flex-column chat-container">
                 {/* {messages.length && messages.map((message,index) => <p key={index}>{message.userName}</p>)} */}
                 <div className="scroll-content pl-2 pr-2">
                     <div className="container-fluid">
                     {messages.length>0 && messages.map((message,index) => {
-                            return (
-                                
+                            return (  
                                 <div className="speech-wrapper">
                                     <div className={`bubble ${message.userName === username ? "" : 'alt'}`}>
                                         <div className="txt">
@@ -84,8 +83,8 @@ const Chat = () => {
                     >
                     </input>
                 <Button variant="primary"
-                    onClick={handleSubmit} 
-                >
+                    onClick={handleSubmit}
+                    >
                     Send
                     </Button>
                 </span>
