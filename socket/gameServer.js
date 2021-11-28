@@ -164,9 +164,12 @@ io.on("connection", (socket) => {
         io.to(room).emit("New user", users[room], Array.from(socketToUserName));
 
         
-        if (roundToRoom[room] <= maxRounds)
+        if (roundToRoom[room] <= maxRounds){
+            if (users[room].length == 1){
+                roundToRoom[room] = 0;
+            }
             socket.emit("Round number", roundToRoom[room]);
-        
+        }
 
         if (!timeToRoom[room] && timeToRoom[room]!=0 && users[room].length >=2){
             console.log("starting rounds",socketToRoom[socket.id]);

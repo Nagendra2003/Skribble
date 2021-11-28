@@ -109,7 +109,7 @@ app.post("/api/create", async (req, res) => {
 
   try {
     let users = await query(
-        `INSERT INTO skribbl (UserName,Password,Name,Totalgamesplayed,highestscore,roomid) VALUES ('${UserName}','${Password}','${Name}',0,0,'notknown')`,
+        `INSERT INTO skribbl (UserName,Password,Name,Totalgamesplayed,Highestscore,roomid) VALUES ('${UserName}','${Password}','${Name}',0,0,'notknown')`,
         (err, result) => {
           if (err) {
             console.log(err);
@@ -151,7 +151,7 @@ app.post("/api/updateroomid/:databaseid", async (req, res) => {
     // console.log(roomId);
     try {
       let pool = await query(
-            `UPDATE skribbl SET highestscore='${points}' WHERE UserName=${username}`,
+            `UPDATE skribbl SET Highestscore='${points}' WHERE UserName=${username}`,
           (err, result) => {
             if (err) {
               console.log(err);

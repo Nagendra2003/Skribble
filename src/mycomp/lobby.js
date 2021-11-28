@@ -132,22 +132,18 @@ const Lobby = () => {
 
     return (
     <div className="lobby">
-    <Container fluid="md">
-        <Navbar bg="light" variant="light">
-        <Container>
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-        <Nav className="me-auto">
-        <Nav.Link href="#home">Home</Nav.Link>
-        <Nav.Link href="#features">Features</Nav.Link>
-        <Nav.Link href="#pricing">Pricing</Nav.Link>
-        </Nav>
-        </Container>
-    </Navbar>
-    <Row>
+    <Container className="Skribbl"></Container>
+    <CopyToClipboard text={roomid}>
+                    <Button  style={{marginTop:"-10vh"}} variant="contained" color="primary" startIcon={<AssignmentIcon fontSize="medium" />}>
+                    Copy Room ID
+                    </Button>
+                </CopyToClipboard>
+            {!gameOver ? `Round: ${roundNumber}` : "Game Over"}
+    <Container fluid="md" >
+                
+    <Row >
     <Col>
         <span>
-            <Container className="Skribbl"></Container>
-           
             
             <Modal
             show={showWordList}
@@ -201,14 +197,14 @@ const Lobby = () => {
             </span>
         </span>
     </Col>
-    <Col style={{marginTop:"5vh"}} xs={6} >
+    <Col  xs={6} >
         <span className="Board">
             <div>
-                 <span className="color-picker-container">
+                 <span className="color-picker-container" style={{color:"red"}}>
                      Select Brush Color : &nbsp; 
                      <input type="color" value={color} onChange={(e) => setColor(e.target.value)}/>
                  </span>
-                 <span className="brushsize-container">
+                 <span className="brushsize-container" style={{color:"red", marginLeft:"5px"}}>
                      Select Brush Size : &nbsp; 
                      <select value={size} onChange={(e) => setSize(e.target.value)}>
                          <option> 2 </option>
@@ -227,7 +223,7 @@ const Lobby = () => {
                  <button type="button" className="btn btn-black" onClick={()=>setMode("eraser")}><img src={eraser} alt="eraser"></img></button>
                  </span>
                  <span className="Eraser">
-                 <button type="button" className="btn btn-black" onClick={()=>setMode("delete")}><ClearIcon /></button>
+                 <button type="button" className="btn btn-black" onClick={()=>setMode("delete")}><ClearIcon filled style={{color:"red"}}/></button>
                  </span>
                  </div>
                  <div className={mode==="eraser" ? "canvas2" : "canvas1"} >
@@ -237,7 +233,7 @@ const Lobby = () => {
     </Col>
     <Col style={{marginTop:"1vh"}}>
         <span className="overflow-auto" id="chat-section">
-                <h2 style={{marginBottom:"5vh", color:"crimson"}}>{!gameOver ? `Round: ${roundNumber}` : "Game Over"}</h2>
+                
                 <h2>Chat</h2>
                 <Chat 
                     Time={time}
@@ -249,11 +245,7 @@ const Lobby = () => {
                 />
                 
         </span>
-                <CopyToClipboard text={roomid} style={{marginBottom: "2rem"}}>
-                    <Button className="Copy" variant="contained" color="primary" startIcon={<AssignmentIcon fontSize="medium" />}>
-                    Copy Room ID
-                    </Button>
-                </CopyToClipboard>
+                
     </Col>
   </Row>
   <div>
