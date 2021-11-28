@@ -226,9 +226,6 @@ const Lobby = () => {
                  <span className="Eraser">
                  <button type="button" className="btn btn-black" onClick={()=>setMode("eraser")}><img src={eraser} alt="eraser"></img></button>
                  </span>
-                 <span className="Eraser">
-                 <button type="button" className="btn btn-black" onClick={()=>setMode("delete")}><ClearIcon filled style={{color:"red"}}/></button>
-                 </span>
                  </div>
                  <div className={mode==="eraser" ? "canvas2" : "canvas1"} id={boardLock===true ? "c1" : "c2"}>
                     <Board color={color} size={size} mode={mode} />
