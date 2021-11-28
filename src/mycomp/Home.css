@@ -41,5 +41,6 @@ body {
     border: 0;
     padding: 8px;
     border-radius: 8px;
+    margin-bottom: 10px;
     cursor: pointer;
   }

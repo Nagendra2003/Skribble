@@ -5,12 +5,11 @@ import { useParams } from 'react-router';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
-const socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ]});
+var socket = null;
 
-const Chat = () => {
+const Chat = ({Socket}) => {
     
     const {roomid,username} = useParams();
-    
     const [messages, setMessages] = useState([]);
     const messagesEnd = useRef(null);
 
@@ -18,6 +17,8 @@ const Chat = () => {
 
     
     useEffect(() => {
+        
+        socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ], query:{userName:username}});
         console.log("HEYEYEYE");
         socket.emit("JOIN_ROOM",roomid);
 
@@ -53,7 +54,7 @@ const Chat = () => {
                     <div className="container-fluid">
                     {messages.length>0 && messages.map((message,index) => {
                             return (  
-                                <div className="speech-wrapper">
+                                <div className="speech-wrapper" key={index}>
                                     <div className={`bubble ${message.userName === username ? "" : 'alt'}`}>
                                         <div className="txt">
                                         <p className={`name ${message.userName === username ? "" : 'alt'}`}>{message.userName}</p>
