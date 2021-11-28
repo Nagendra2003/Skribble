@@ -61,7 +61,6 @@ io.on("connection",(socket) => {
         }
         else if (message.correct === false){
             io.to(roomid).emit("New Message", message);
-            socket.emit("New Message", {userName: message.userName, value: "Incorrect guess"});
         }
         else{
             io.to(roomid).emit("New Message", message);

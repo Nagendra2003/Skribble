@@ -75,8 +75,9 @@ const Lobby = () => {
             setTimeUp(true);
         });
 
-        gameSocket.on("User picking word", (userName) => {
+        gameSocket.on("User picking word", (userName, round) => {
             setPicker(userName);
+            setRoundNumber(round);
             
             if (userName !== username){
                 setBoardLock(true);
@@ -159,19 +160,17 @@ const Lobby = () => {
             <span>
                 <div>
                     <span>
-                    {!gameOver && time != 0 && drawing ? <h4>Time remaining: {time}</h4> : timeUp && <h4>Correct Word: {correctWord} </h4> }
-                    {gameOver && <h4>Game Over</h4>}
+                    {!gameOver && time != 0 && drawing ? <h4 style={{color:"crimson"}}>Time remaining: {time}</h4> : timeUp && <h4 style={{color:"crimson"}}>Correct Word: {correctWord} </h4> }
                     </span>
                 <div className="Participants">
                     <div>
-                    <h2>Participants</h2>
-                    <Card style={{ width: '18rem' }}>
+                    {/* <h2>Participants</h2> */}
+                    <Card style={{ width: '19.2rem'}}>
+                    <Card.Header style={{color:"black"}} > Participants</Card.Header>
                     <ListGroup variant="flush">
-                        
-                    
                     {users.length>0 && users.map((user,index) => {
                     return(
-                    <ListGroup.Item key={index}>{socketToUsername.get(user)} {points.get(socketToUsername.get(user))}</ListGroup.Item>
+                    <ListGroup.Item style={{color:"crimson"}} key={index}>{socketToUsername.get(user)} {points.get(socketToUsername.get(user))}</ListGroup.Item>
                     )})}
                     </ListGroup>
                     </Card>
@@ -215,8 +214,9 @@ const Lobby = () => {
                  </div>
          </span>
     </Col>
-    <Col style={{marginTop:"12vh"}}>
+    <Col style={{marginTop:"1vh"}}>
         <span className="overflow-auto" id="chat-section">
+                <h2 style={{marginBottom:"5vh", color:"crimson"}}>{!gameOver ? `Round: ${roundNumber}` : "Game Over"}</h2>
                 <h2>Chat</h2>
                 <Chat 
                     Time={time}

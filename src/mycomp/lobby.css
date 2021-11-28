@@ -42,9 +42,11 @@
     margin-top:2.5vh;
 }
 #chat-section{
+    max-height: 70vh;
     height: 70vh;
+    max-width: 300px;
     margin-top:3vh;
-  
+    position: relative;
     background-image: url("../chat-background.jfif");
 }
 #chat-section h2{

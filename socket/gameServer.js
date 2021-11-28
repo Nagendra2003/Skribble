@@ -162,14 +162,15 @@ io.on("connection", (socket) => {
         console.log(socketToUserName);
         
         io.to(room).emit("New user", users[room], Array.from(socketToUserName));
-        if (!timeToRoom[room] && timeToRoom[room]!=0 && users[room].length >=2 ){
+        if (!timeToRoom[room] && timeToRoom[room]!=0 && users[room].length >=2){
             console.log("starting rounds",socketToRoom[socket.id]);
             let socketID = pickRandomUser(socketToRoom[socket.id]);
             let wordList = pickRandomWords();
             console.log(socket.id,socketID,socketToUserName.get(socket.id));
-            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName.get(socketID));
-            io.to(socketID).emit("Pick A Word", wordList);
             roundToRoom[room] = 1;
+            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName.get(socketID), roundToRoom[room]);
+            io.to(socketID).emit("Pick A Word", wordList);
+            
         }
 
     });
@@ -200,7 +201,7 @@ io.on("connection", (socket) => {
                         let socketID = pickRandomUser(socketToRoom[socket.id]);
                         let wordList = pickRandomWords();
                         console.log(socket.id,socketID,socketToUserName.get(socket.id));
-                        io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName.get(socketID));
+                        io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName.get(socketID), roundToRoom[socketToRoom[socket.id]]);
                         io.to(socketID).emit("Pick A Word", wordList);
                         
                     },2000);
