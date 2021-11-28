@@ -34,7 +34,9 @@
     background-color: black;
     cursor:url('../img/rubber.gif') 0 40, move;
 }
-
+#c1{
+    pointer-events: none;
+}
 .color-picker-container{
     margin-top:2.5vh;
 }
