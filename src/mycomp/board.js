@@ -12,14 +12,11 @@ class board extends React.Component {
     username;
     roomid;
     mode;
-    picker;
     
 
     constructor(props){
         super(props);
         this.mode="pen";
-        this.picker = this.props.picker;
-        this.boardLock = this.props.match.params.boardLock;
         this.username =this.props.match.params.username;
         this.roomid =this.props.match.params.roomid;
         this.socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ],query:{userName:this.username}});
@@ -43,7 +40,6 @@ class board extends React.Component {
         this.ctx.strokeStyle = newProps.color;
         this.ctx.lineWidth = newProps.size;
         this.mode = newProps.mode;
-        this.picker = newProps.picker;
         if(this.mode==="delete"){
             var canvas = document.querySelector('#board');
             var ctx=canvas.getContext('2d');
@@ -72,8 +68,6 @@ class board extends React.Component {
     
         var mouse = {x: 0, y: 0};
         var last_mouse = {x: 0, y: 0};
-        if (this.picker == this.username){
-            console.log(this.picker)
             /* Mouse Capturing Work */
             canvas.addEventListener('mousemove', function(e) {
                 last_mouse.x = mouse.x;
@@ -82,7 +76,6 @@ class board extends React.Component {
                 mouse.x = e.pageX - this.offsetLeft;
                 mouse.y = e.pageY - this.offsetTop;
             }, false);
-        }
     
         /* Drawing on Paint App */
         ctx.lineWidth = this.props.size;
