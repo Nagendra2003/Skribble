@@ -15,11 +15,13 @@ export default function User() {
 
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/getFromId/${databaseid}`).then((data) => {
-      // console.log(data);
+      console.log(data);
       setUser({
         Password: data.data[0].Password,
         Name: data.data[0].Name,
         UserName: data.data[0].UserName,
+        Totalgames:data.data[0].Totalgamesplayed,
+        Highestscore:data.data[0].Highestscore,
         Id: data.data[0].Id,
       });
 
@@ -43,30 +45,34 @@ export default function User() {
     history.push("/");
   };
   const updateUser = (databaseid, newdata) => {
-    Axios.delete(`http://localhost:3002/api/delete/${databaseid}`).then(
+    Axios.post(`http://localhost:3002/api/updateinfo/${databaseid}`,newdata).then(
       (response) => {
-        console.log("you deleted a user");
+        alert("Info successfully updated!");
       }
     );
-    Axios.post("http://localhost:3002/api/create", newdata);
     history.push("/");
   };
   const showform = (bool) => {
     setShowUpdateForm(bool);
   };
   const submit = () => {
-    let newdata = { UserName: userName, Password: password, Name: name };
+    let newdata = { Username: userName, Name: name };
     setShowUpdateForm(false);
     updateUser(databaseid, newdata);
   };
 
   return (
     <div className="User individual">
-      <h4>Username : {user.UserName}</h4>
-      <button onClick={() => deleteUser(user.Id)}>Delete User</button>
+      <h6>Username : {user.UserName}</h6>
+      <h6>Name : {user.Name}</h6>
+      <h6>Total Games Played : {user.Totalgames}</h6>
+      <h6>Highest Score : {user.Highestscore}</h6>
+
+      <button onClick={() => deleteUser(user.Id)}>Delete Account</button>
       {!showUpdateForm && (
-        <button onClick={() => showform(true)}>Update User</button>
+        <button onClick={() => showform(true)}>Update Info</button>
       )}
+      <br></br>
       {showUpdateForm && (
         <form class="updateForm" onSubmit={submit}>
           <label>Username: </label>
