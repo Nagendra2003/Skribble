@@ -35,6 +35,7 @@ const Lobby = () => {
     const [ chatLock, setChatlock ] = useState(false);
     const [ gameOver, setGameOver ] = useState(false);
     const [ drawing, setDrawing ] = useState(false);
+    const [ correctWord, setCorrectWord ] = useState("");
 
     useEffect(() => {
         
@@ -80,9 +81,11 @@ const Lobby = () => {
             setGameOver(true);
         });
 
-        gameSocket.on("User is drawing", (user) => {
-            if (user != username)
-                setDrawing(true);
+        gameSocket.on("User is drawing", (user, word) => {
+            console.log(word);
+            setCorrectWord(word);
+            setDrawing(true);
+            setTimeUp(false);
         });
 
     },[gameSocket])
@@ -134,7 +137,8 @@ const Lobby = () => {
             <span>
                 <div>
                     <span>
-                    {gameOver && time != 0 ? <h4>Time remaining: {time}</h4> : <h4> Times up</h4> }
+                    {!gameOver && time != 0 && drawing ? <h4>Time remaining: {time}</h4> : timeUp && <h4>Correct Word: {correctWord} </h4> }
+                    {gameOver && <h4>Game Over</h4>}
                     </span>
                 <div className="Participants">
                     <Participants/>
@@ -173,7 +177,7 @@ const Lobby = () => {
                  </span>
                  </div>
                  <div className={mode==="eraser" ? "canvas2" : "canvas1"} >
-                    <Board color={color} size={size} mode={mode} boardLock={boardLock} />
+                    <Board color={color} size={size} mode={mode} picker={picker} />
                  </div>
          </span>
     </Col>

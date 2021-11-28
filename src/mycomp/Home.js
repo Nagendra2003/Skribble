@@ -78,7 +78,8 @@ const InitialPage = () => {
            <Button variant="primary" onClick={handleSubmit}> Join Room</Button>
            </div>
            }
-            <select value={joinRoom} onChange={(e) => {setJoinRoom(e.target.value)}}>
+           <br></br>
+            <select style={{marginLeft:"10px"}} value={joinRoom} onChange={(e) => {setJoinRoom(e.target.value)}}>
                 <option value="Create Room" > 
                     Create Room
                 </option>

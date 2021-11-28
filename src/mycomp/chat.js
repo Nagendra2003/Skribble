@@ -18,7 +18,6 @@ const Chat = ({chatLock}) => {
     
     useEffect(() => {
         
-        
         console.log("HEYEYEYE");
         socket.emit("JOIN_ROOM",roomid);
 

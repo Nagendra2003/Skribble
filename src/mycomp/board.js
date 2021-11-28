@@ -12,14 +12,16 @@ class board extends React.Component {
     username;
     roomid;
     mode;
+
     
 
     constructor(props){
         super(props);
         this.mode="pen";
         this.state={
-            boardLock: this.props.match.params.boardLock
+            picker: this.props.match.params.picker
         }
+        this.boardLock = this.props.match.params.boardLock;
         this.username =this.props.match.params.username;
         this.roomid =this.props.match.params.roomid;
         this.socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ],query:{userName:this.username}});
@@ -59,7 +61,9 @@ class board extends React.Component {
     componentWillUnmount(){
         this.socket.disconnect(this.roomid);
     }
+    
     paint(){
+        
         var canvas = document.querySelector('#board');
         var ctx = canvas.getContext('2d');
         this.ctx=ctx;
@@ -69,15 +73,17 @@ class board extends React.Component {
     
         var mouse = {x: 0, y: 0};
         var last_mouse = {x: 0, y: 0};
-        /* Mouse Capturing Work */
-        canvas.addEventListener('mousemove', function(e) {
-            last_mouse.x = mouse.x;
-            last_mouse.y = mouse.y;
-    
-            mouse.x = e.pageX - this.offsetLeft;
-            mouse.y = e.pageY - this.offsetTop;
-        }, false);
-    
+        if (this.state.picker !== this.username){
+            console.log(this.boardLock)
+            /* Mouse Capturing Work */
+            canvas.addEventListener('mousemove', function(e) {
+                last_mouse.x = mouse.x;
+                last_mouse.y = mouse.y;
+        
+                mouse.x = e.pageX - this.offsetLeft;
+                mouse.y = e.pageY - this.offsetTop;
+            }, false);
+        }
     
         /* Drawing on Paint App */
         ctx.lineWidth = this.props.size;
@@ -111,7 +117,6 @@ class board extends React.Component {
         var root=this;
         var onPaint = function() {
             
-            if (!this.boardLock){
                 if(root.mode==="pen"){
 
                     ctx.globalCompositeOperation="source-over";
@@ -137,7 +142,7 @@ class board extends React.Component {
                     var base64ImageData=canvas.toDataURL("image/png");
                     root.socket.emit("canvas-data",base64ImageData,root.roomid);
                 },200)
-            }
+            
         };
     
     };

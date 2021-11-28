@@ -209,7 +209,7 @@ io.on("connection", (socket) => {
 
     socket.on("Chose word", (word) => {
         console.log(word);
-        io.to(socketToRoom[socket.id]).emit("User is drawing", socketToUserName[socket.id]);
+        io.to(socketToRoom[socket.id]).emit("User is drawing", socketToUserName[socket.id], word);
         
         roundGoing[socketToRoom[socket.id]] = true;
         startRound(socketToRoom[socket.id]);
