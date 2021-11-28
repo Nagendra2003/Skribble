@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useParams } from 'react-router';
@@ -7,19 +6,18 @@ import Button from 'react-bootstrap/Button';
 
 var socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ]});
 
-const Chat = ({chatLock}) => {
+const Chat = ({Time,word,gameSocket,chatLock,changePoints}) => {
     
     const {roomid,username} = useParams();
     const [messages, setMessages] = useState([]);
     const messagesEnd = useRef(null);
-
     const [value , setValue] = useState("");
-
+    const [lock,setLock]=useState(chatLock);
     
     useEffect(() => {
         
         console.log("HEYEYEYE");
-        socket.emit("JOIN_ROOM",roomid);
+        socket.emit("JOIN_ROOM",roomid,username);
 
         return () => {
             socket.disconnect(roomid);
@@ -27,17 +25,28 @@ const Chat = ({chatLock}) => {
     },[]);
 
     const handleSubmit = () => {
-        
-        if(value!==""){socket.emit("New Message",{userName: username,value},roomid);
+        if(value===word){
+            socket.emit("New Message",{userName: username,value: value, correct: true},roomid, Time);
+            setValue("");
+            setLock(true);
+        }
+        else if(value!==""){socket.emit("New Message",{userName: username,value, correct: false},roomid, Time);
         setValue("");}
     }
 
     useEffect(() => {
         socket.on("New Message", (message) => {
             console.log(roomid);
-            
             setMessages((prevState) => [...prevState, message]);
+            // if(message.value===word){message.value="Correct guess";}
+            // setMessages((prevState) => [...prevState, message]);
         });
+
+        socket.on("Updated points", (transitString) => {
+            let newMap = new Map(Array.from(transitString));
+            changePoints(newMap);
+        });
+
     },[socket]);
 
     useEffect(() => {
@@ -78,14 +87,14 @@ const Chat = ({chatLock}) => {
                  <div style={{ float: 'left', clear: 'both' }} ref={messagesEnd} />
                 <span>
                     <input required
-                    disabled={chatLock}
+                    disabled={lock || chatLock}
                     value= {value}
                     onChange={(e)=>{setValue(e.target.value)}}
                     >
                     </input>
                 <Button variant="primary"
                    
-                    disabled={chatLock}
+                    disabled={lock || chatLock}
                     onClick={() => { handleSubmit();}}
                     >
                     Send

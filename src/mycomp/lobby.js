@@ -38,6 +38,7 @@ const Lobby = () => {
     const [ correctWord, setCorrectWord ] = useState("");
     const [ users, setUsers ] = useState([]);
     const [ socketToUsername, setSocketToUsername ] = useState(new Map());
+    const [ points, setPoints ] = useState(new Map());
 
     useEffect(() => {
         
@@ -164,7 +165,7 @@ const Lobby = () => {
                     <h2>Participants</h2>
                     {users.length>0 && users.map((user,index) => {
                     return(
-                    <p key={index}>{socketToUsername.get(user)}</p>
+                    <p key={index}>{socketToUsername.get(user)} {points.get(socketToUsername.get(user))}</p>
                     )})}
                     </div>
                 </div>
@@ -210,8 +211,11 @@ const Lobby = () => {
         <span className="overflow-auto" id="chat-section">
                 <h2>Chat</h2>
                 <Chat 
+                    Time={time}
+                    word={correctWord}
                     gameSocket={gameSocket}
                     chatLock={chatLock}
+                    changePoints={(points) => setPoints(points)}
                 />
         </span>
     </Col>

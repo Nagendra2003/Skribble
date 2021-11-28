@@ -193,7 +193,7 @@ io.on("connection", (socket) => {
                     console.log("max rounds reached");
                     return;
                 }
-                else if (users[room].length >=2) {
+                else if (users[socketToRoom[socket.id]].length >=2) {
                     
                     setTimeout(() => {
                         console.log("socketToRoom",socketToRoom);

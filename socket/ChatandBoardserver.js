@@ -20,13 +20,13 @@ http.listen(server_port,()=>{
 //For storing uids corresponding to a client
 const userSocketidMap = new Map();
 const users = {}
-
+const pointToUsername = new Map();
 
 io.on("connection",(socket) => {
     console.log("New client connected",socket.id);  
     
 
-    socket.on("JOIN_ROOM", (room)=>{
+    socket.on("JOIN_ROOM", (room,username)=>{
         // let userName = socket.handshake.query.userName;
         // if (!roomusermap.has(room)){
         //     roomusermap.set(room,userName);
@@ -45,14 +45,24 @@ io.on("connection",(socket) => {
             users[room] = [socket.id];
         }
         //console.log(timeToRoom[room]);
+        pointToUsername.set(username,0);
         socket.join(room);
         console.log(room);
     });
 
 
-    socket.on("New Message", (message,roomid) => {
-        io.to(roomid).emit("New Message", message);
-
+    socket.on("New Message", (message,roomid,time) => {
+        if (message.correct){
+            io.to(roomid).emit("New Message", message);
+            io.to(roomid).emit("New Message", {userName: message.userName, value: "Correct guess"});
+            let currPoints = pointToUsername.get(message.userName);
+            pointToUsername.set(message.userName, currPoints+time);
+            io.to(roomid).emit("Updated points", Array.from(pointToUsername));
+        }
+        else{
+            io.to(roomid).emit("New Message", message);
+            io.to(roomid).emit("New Message", {userName: message.userName, value: "Incorrect guess"});
+        }
     });
 
     socket.on("canvas-data",(data,roomid)=>{
