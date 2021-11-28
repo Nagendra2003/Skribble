@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
-var socket = null;
+var socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ]});
 
 const Chat = ({chatLock}) => {
     
@@ -18,7 +18,7 @@ const Chat = ({chatLock}) => {
     
     useEffect(() => {
         
-        socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ], query:{userName:username}});
+        
         console.log("HEYEYEYE");
         socket.emit("JOIN_ROOM",roomid);
 

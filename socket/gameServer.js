@@ -153,7 +153,7 @@ io.on("connection", (socket) => {
          
         //console.log(timeToRoom[room]);
         socket.emit("Time broadcast", timeToRoom[room]);
-        socket.emit("Round number");
+        socket.emit("Round number", roundToRoom[socketToRoom[socket.id]]);
         socket.join(room);
         console.log("assigning room = ",room);
         socketToRoom[socket.id] = room;
@@ -210,7 +210,7 @@ io.on("connection", (socket) => {
     socket.on("Chose word", (word) => {
         console.log(word);
         io.to(socketToRoom[socket.id]).emit("User is drawing", socketToUserName[socket.id]);
-        socket.emit("Unlock board");
+        
         roundGoing[socketToRoom[socket.id]] = true;
         startRound(socketToRoom[socket.id]);
     });

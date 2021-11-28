@@ -29,7 +29,7 @@ const Participants=()=>{
     
     return(
         <div>
-            <h1>Participants</h1>
+            <h2>Participants</h2>
             {alluser.length>0 && alluser.map((user,index) => {
               return(
               <p key={index}>{user.UserName}</p>

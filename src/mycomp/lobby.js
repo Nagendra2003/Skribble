@@ -26,12 +26,15 @@ const Lobby = () => {
     const [ time, setTime ] = useState("");
     const [ timeUp, setTimeUp ] = useState(false);
     const [ picker, setPicker ] = useState("");
+    const [ roundNumber, setRoundNumber ] = useState(0);
     const [ boardLock, setBoardLock ] = useState(false);
     const [ wordList, setWordList ] = useState([]);
     const [ showWordList, setShowWordList ] = useState(false);
     const [ choseWord, setChoseWord ] = useState(false);
     const [ choosenWord, setChoosenWord ] = useState("");
     const [ chatLock, setChatlock ] = useState(false);
+    const [ gameOver, setGameOver ] = useState(false);
+    const [ drawing, setDrawing ] = useState(false);
 
     useEffect(() => {
         
@@ -71,7 +74,15 @@ const Lobby = () => {
         gameSocket.on("Pick A Word", (wordList) => {
             setWordList(wordList);
             setShowWordList(true);
-            
+        });
+
+        gameSocket.on("Game over", () => {
+            setGameOver(true);
+        });
+
+        gameSocket.on("User is drawing", (user) => {
+            if (user != username)
+                setDrawing(true);
         });
 
     },[gameSocket])
@@ -88,14 +99,9 @@ const Lobby = () => {
     <Row>
     <Col>
         <span>
-            {time != 0 ? <h4>Time remaining: {time}</h4> : <h4> Times up</h4> }
-            {showWordList && <button className="button" onClick={() => {setChoseWord(true); handleChoseWord(); setShowWordList(false); }}> </button>}
-            {showWordList && <h2>User Picking words:{picker}</h2>}
-            {/* {showWordList && wordList.map((word,index) => {
-                return (
-                    <h4 key={index}>{word}</h4>
-                );
-            })} */}
+            <Container className="Skribbl"></Container>
+           
+            
             <Modal
             show={showWordList}
             // onHide={() => setShowWordList(false)}
@@ -125,12 +131,19 @@ const Lobby = () => {
                 <Button variant="primary">Understood</Button>
             </Modal.Footer> */}
             </Modal>
-            <div className="Participants">
-            <Participants/>
-            </div>
+            <span>
+                <div>
+                    <span>
+                    {gameOver && time != 0 ? <h4>Time remaining: {time}</h4> : <h4> Times up</h4> }
+                    </span>
+                <div className="Participants">
+                    <Participants/>
+                </div>
+                </div>
+            </span>
         </span>
     </Col>
-    <Col xs={6} >
+    <Col style={{marginTop:"5vh"}} xs={6} >
         <span className="Board">
             <div>
                  <span className="color-picker-container">
@@ -160,12 +173,13 @@ const Lobby = () => {
                  </span>
                  </div>
                  <div className={mode==="eraser" ? "canvas2" : "canvas1"} >
-                    <Board color={color} size={size} mode={mode}/>
+                    <Board color={color} size={size} mode={mode} boardLock={boardLock} />
                  </div>
          </span>
     </Col>
-    <Col>
+    <Col style={{marginTop:"12vh"}}>
         <span className="overflow-auto" id="chat-section">
+                <h2>Chat</h2>
                 <Chat 
                     gameSocket={gameSocket}
                     chatLock={chatLock}

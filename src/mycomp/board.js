@@ -12,11 +12,14 @@ class board extends React.Component {
     username;
     roomid;
     mode;
+    
 
     constructor(props){
         super(props);
         this.mode="pen";
-
+        this.state={
+            boardLock: this.props.match.params.boardLock
+        }
         this.username =this.props.match.params.username;
         this.roomid =this.props.match.params.roomid;
         this.socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ],query:{userName:this.username}});
@@ -108,32 +111,33 @@ class board extends React.Component {
         var root=this;
         var onPaint = function() {
             
-            if(root.mode==="pen"){
+            if (!this.boardLock){
+                if(root.mode==="pen"){
 
-                ctx.globalCompositeOperation="source-over";
-                ctx.beginPath();
-                ctx.moveTo(last_mouse.x, last_mouse.y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.closePath();
-                ctx.stroke();
+                    ctx.globalCompositeOperation="source-over";
+                    ctx.beginPath();
+                    ctx.moveTo(last_mouse.x, last_mouse.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+                if(root.mode==="eraser"){
+                    ctx.globalCompositeOperation="destination-out";
+                    // ctx.arc(last_mouse.x, last_mouse.y,1,0,Math.PI*2,false);
+                    ctx.beginPath();
+                    ctx.moveTo(last_mouse.x, last_mouse.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.closePath();
+                    ctx.stroke();
+                    // ctx.fill();
+                    ctx.globalCompositeOperation="source-over";
+                }
+                if(root.timeout !== undefined){clearTimeout(root.timeout);}
+                root.timeout=setTimeout(function(){
+                    var base64ImageData=canvas.toDataURL("image/png");
+                    root.socket.emit("canvas-data",base64ImageData,root.roomid);
+                },200)
             }
-            if(root.mode==="eraser"){
-                ctx.globalCompositeOperation="destination-out";
-                // ctx.arc(last_mouse.x, last_mouse.y,1,0,Math.PI*2,false);
-                ctx.beginPath();
-                ctx.moveTo(last_mouse.x, last_mouse.y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.closePath();
-                ctx.stroke();
-                // ctx.fill();
-                ctx.globalCompositeOperation="source-over";
-            }
-            if(root.timeout !== undefined){clearTimeout(root.timeout);}
-            root.timeout=setTimeout(function(){
-                var base64ImageData=canvas.toDataURL("image/png");
-                root.socket.emit("canvas-data",base64ImageData,root.roomid);
-            },200)
-
         };
     
     };

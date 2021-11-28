@@ -27,7 +27,7 @@ io.on("connection",(socket) => {
     
 
     socket.on("JOIN_ROOM", (room)=>{
-        let userName = socket.handshake.query.userName;
+        // let userName = socket.handshake.query.userName;
         // if (!roomusermap.has(room)){
         //     roomusermap.set(room,userName);
         // }
