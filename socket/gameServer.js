@@ -16,7 +16,7 @@ let users = {}
 let socketToRoom = {}
 let roundToRoom = {}
 let timeToRoom = {}
-let maxRounds = 4
+let maxRounds = 2
 let roundGoing = {}
 let UserNameToSocket = {}
 let socketToUserName = {}
@@ -92,9 +92,8 @@ var x = setInterval(function() {
             if (now >= 0 ){
                 timeToRoom[keyName] = now;
             }
-            else{
+            if (now == 0){
                 roundToRoom[keyName] += 1;
-               
             }
         }
     });
@@ -180,21 +179,25 @@ io.on("connection", (socket) => {
             if (timeToRoom[socketToRoom[socket.id]] === 0 && roundGoing[socketToRoom[socket.id]]){
                 io.to(socketToRoom[socket.id]).emit("Times up");
                 roundGoing[socketToRoom[socket.id]] = false;
+                console.log(roundToRoom[socketToRoom[socket.id]]);
 
                 if (roundToRoom[socketToRoom[socket.id]] > maxRounds){
                     io.to(socketToRoom[socket.id]).emit("Game over");
+                    roundGoing[socketToRoom[socket.id]] = false;
+                    console.log("max rounds reached");
+                    return;
                 }
-
-                setTimeout(() => {
-                    let socketID = pickRandomUser(socketToRoom[socket.id]);
-                    let wordList = pickRandomWords();
-                    if (socket.id == socketID){
-                        io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socket.id]);
-                        console.log(socketToUserName[socket.id]);
-                        socket.emit("Pick A Word", wordList);
-                    }
-                },2000);
-                
+                else{
+                    setTimeout(() => {
+                        let socketID = pickRandomUser(socketToRoom[socket.id]);
+                        let wordList = pickRandomWords();
+                        if (socket.id == socketID){
+                            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socket.id]);
+                            console.log(socketToUserName[socket.id]);
+                            socket.emit("Pick A Word", wordList);
+                        }
+                    },2000);
+                }
                 // setTimeout(() => {
                 //     io.to(socketToRoom[socket.id]).emit("Starting next round");
                 //     roundGoing[socketToRoom[socket.id]] = true;
