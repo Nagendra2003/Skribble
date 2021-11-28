@@ -52,16 +52,19 @@ io.on("connection",(socket) => {
 
 
     socket.on("New Message", (message,roomid,time) => {
-        if (message.correct){
+        if (message.correct===true){
             io.to(roomid).emit("New Message", message);
-            io.to(roomid).emit("New Message", {userName: message.userName, value: "Correct guess"});
+            socket.emit("New Message", {userName: message.userName, value: "Correct guess"});
             let currPoints = pointToUsername.get(message.userName);
             pointToUsername.set(message.userName, currPoints+time);
             io.to(roomid).emit("Updated points", Array.from(pointToUsername));
         }
+        else if (message.correct === false){
+            io.to(roomid).emit("New Message", message);
+            socket.emit("New Message", {userName: message.userName, value: "Incorrect guess"});
+        }
         else{
             io.to(roomid).emit("New Message", message);
-            io.to(roomid).emit("New Message", {userName: message.userName, value: "Incorrect guess"});
         }
     });
 

@@ -6,13 +6,13 @@ import Button from 'react-bootstrap/Button';
 
 var socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ]});
 
-const Chat = ({Time,word,gameSocket,chatLock,changePoints}) => {
+const Chat = ({Time,word,gameSocket,chatLock,changePoints, setChatlock}) => {
     
     const {roomid,username} = useParams();
     const [messages, setMessages] = useState([]);
     const messagesEnd = useRef(null);
     const [value , setValue] = useState("");
-    const [lock,setLock]=useState(chatLock);
+    // const [lock, setLock]=useState(chatLock);
     
     useEffect(() => {
         
@@ -25,13 +25,16 @@ const Chat = ({Time,word,gameSocket,chatLock,changePoints}) => {
     },[]);
 
     const handleSubmit = () => {
-        if(value===word){
+        if(value===word && word!==""){
             socket.emit("New Message",{userName: username,value: value, correct: true},roomid, Time);
             setValue("");
-            setLock(true);
+            setChatlock(true);
         }
-        else if(value!==""){socket.emit("New Message",{userName: username,value, correct: false},roomid, Time);
-        setValue("");}
+        else if(value!=="" && word!==""){socket.emit("New Message",{userName: username,value, correct: false},roomid, Time)}
+        else{
+            socket.emit("New Message", {userName: username, value: value, correct: ""}, roomid, Time);
+        }
+        setValue("");
     }
 
     useEffect(() => {
@@ -87,14 +90,14 @@ const Chat = ({Time,word,gameSocket,chatLock,changePoints}) => {
                  <div style={{ float: 'left', clear: 'both' }} ref={messagesEnd} />
                 <span>
                     <input required
-                    disabled={lock || chatLock}
+                    disabled={chatLock}
                     value= {value}
                     onChange={(e)=>{setValue(e.target.value)}}
                     >
                     </input>
                 <Button variant="primary"
                    
-                    disabled={lock || chatLock}
+                    disabled={chatLock}
                     onClick={() => { handleSubmit();}}
                     >
                     Send

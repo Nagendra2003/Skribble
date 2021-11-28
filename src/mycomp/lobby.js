@@ -14,6 +14,8 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { render } from 'sass';
 import './lobby.css';
+import { ListGroup } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 var gameSocket = null;
 
@@ -163,10 +165,16 @@ const Lobby = () => {
                 <div className="Participants">
                     <div>
                     <h2>Participants</h2>
+                    <Card style={{ width: '18rem' }}>
+                    <ListGroup variant="flush">
+                        
+                    
                     {users.length>0 && users.map((user,index) => {
                     return(
-                    <p key={index}>{socketToUsername.get(user)} {points.get(socketToUsername.get(user))}</p>
+                    <ListGroup.Item key={index}>{socketToUsername.get(user)} {points.get(socketToUsername.get(user))}</ListGroup.Item>
                     )})}
+                    </ListGroup>
+                    </Card>
                     </div>
                 </div>
                 </div>
@@ -216,6 +224,7 @@ const Lobby = () => {
                     gameSocket={gameSocket}
                     chatLock={chatLock}
                     changePoints={(points) => setPoints(points)}
+                    setChatlock= {(val) => setChatlock(val)}
                 />
         </span>
     </Col>
