@@ -45,25 +45,27 @@ io.on("connection",(socket) => {
             users[room] = [socket.id];
         }
         //console.log(timeToRoom[room]);
-        pointToUsername.set(username,0);
+        if (!pointToUsername.has(username))
+            pointToUsername.set(username,0);
+        
+        socket.emit("Updated points", Array.from(pointToUsername));
         socket.join(room);
         console.log(room);
     });
 
 
     socket.on("New Message", (message,roomid,time) => {
-        if (message.correct===true){
-            io.to(roomid).emit("New Message", message);
-            socket.emit("New Message", {userName: message.userName, value: "Correct guess"});
+        if (message.correct==true){
+            io.to(roomid).emit("New Message", {userName: message.userName, value: "Correct guess"});
+            // socket.emit("New Message", {userName: message.userName, value: "Correct guess"});
             let currPoints = pointToUsername.get(message.userName);
-            pointToUsername.set(message.userName, currPoints+time);
-            io.to(roomid).emit("Updated points", Array.from(pointToUsername));
-        }
-        else if (message.correct === false){
-            io.to(roomid).emit("New Message", message);
+            let newPoint = currPoints+time;
+            pointToUsername.set(message.userName, newPoint);
+            io.to(roomid).emit("Updated points", Array.from(pointToUsername), newPoint);
         }
         else{
             io.to(roomid).emit("New Message", message);
+            // io.to(roomid).emit("New Message", {userName: message.userName, value: "Incorrect guess"});
         }
     });
 

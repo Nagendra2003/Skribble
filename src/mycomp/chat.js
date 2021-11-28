@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import { useParams } from 'react-router';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import Axios from 'axios';
 
 var socket = io("http://127.0.0.1:8080",{ transports: [ "websocket" ]});
 
@@ -18,6 +19,11 @@ const Chat = ({Time,word,gameSocket,chatLock,changePoints, setChatlock}) => {
         
         console.log("HEYEYEYE");
         socket.emit("JOIN_ROOM",roomid,username);
+
+        socket.on("Updated points", (transitString) => {
+            let newMap = new Map(Array.from(transitString));
+            changePoints(newMap);
+        });
 
         return () => {
             socket.disconnect(roomid);
@@ -45,7 +51,13 @@ const Chat = ({Time,word,gameSocket,chatLock,changePoints, setChatlock}) => {
             // setMessages((prevState) => [...prevState, message]);
         });
 
-        socket.on("Updated points", (transitString) => {
+        socket.on("Updated points", (transitString,newPoint) => {
+            console.log(newPoint);
+            Axios.get(`http://localhost:3002/api/gethighestscore/${username}`).then((data) => {
+                            if(data.data.highestscore < newPoint){
+                                Axios.post(`http://localhost:3002/api/updatepoints/${username}/${newPoint}`);
+                            }
+                });
             let newMap = new Map(Array.from(transitString));
             changePoints(newMap);
         });
@@ -93,6 +105,8 @@ const Chat = ({Time,word,gameSocket,chatLock,changePoints, setChatlock}) => {
                     disabled={chatLock}
                     value= {value}
                     onChange={(e)=>{setValue(e.target.value)}}
+                    style={{marginLeft:"0px"}}
+                    placeholder={"Enter your guess here..."}
                     >
                     </input>
                 <Button variant="primary"

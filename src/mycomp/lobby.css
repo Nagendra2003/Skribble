@@ -3,7 +3,7 @@
     width: 100% ;
     background-image: url("../background.jpg");
     padding-top: 2%;
-    position: absolute;
+    /* position: absolute; */
     text-align: center;
 }
 .Participants{
@@ -45,7 +45,7 @@
     max-height: 70vh;
     height: 70vh;
     max-width: 300px;
-    margin-top:3vh;
+    margin-top:1vh;
     position: relative;
     background-image: url("../chat-background.jfif");
 }
@@ -55,6 +55,19 @@
     color: rgb(20, 67, 220);
     margin-bottom: 10px;
   }
+
+.Copy {
+    background: #f1356d;
+    color: #fff;
+    border: 0;
+    padding: 8px;
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+    cursor: pointer;
+}
   
 .wordButton {
     background: #f1356d;

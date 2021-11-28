@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Board from '../mycomp/board';
 import Chat from    '../mycomp/chat';
-import Participants from '../mycomp/participants';
+// import Participants from '../mycomp/participants';
 import pen from '../img/pen.gif';
 import eraser from '../img/rubber.gif';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -14,8 +14,9 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { render } from 'sass';
 import './lobby.css';
-import { ListGroup } from 'react-bootstrap';
-import { Card } from 'react-bootstrap';
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import { ListGroup, Card, Navbar, Nav } from 'react-bootstrap';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 var gameSocket = null;
 
@@ -58,6 +59,11 @@ const Lobby = () => {
             console.log(newMap);
             setSocketToUsername(newMap);
         })
+
+        gameSocket.on("Round number", (round) => {
+            setRoundNumber(round);
+        });
+
         return () => {
             gameSocket.disconnect();
           
@@ -78,6 +84,7 @@ const Lobby = () => {
         gameSocket.on("User picking word", (userName, round) => {
             setPicker(userName);
             setRoundNumber(round);
+            setGameOver(false);
             
             if (userName !== username){
                 setBoardLock(true);
@@ -85,6 +92,10 @@ const Lobby = () => {
                 setChatlock(false);
             }
         });
+
+        gameSocket.on("Round number", (round) => {
+            setRoundNumber(round);
+        })
 
         gameSocket.on("Pick A Word", (wordList) => {
             setWordList(wordList);
@@ -122,6 +133,16 @@ const Lobby = () => {
     return (
     <div className="lobby">
     <Container fluid="md">
+        <Navbar bg="light" variant="light">
+        <Container>
+        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+        <Nav className="me-auto">
+        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="#features">Features</Nav.Link>
+        <Nav.Link href="#pricing">Pricing</Nav.Link>
+        </Nav>
+        </Container>
+    </Navbar>
     <Row>
     <Col>
         <span>
@@ -226,7 +247,13 @@ const Lobby = () => {
                     changePoints={(points) => setPoints(points)}
                     setChatlock= {(val) => setChatlock(val)}
                 />
+                
         </span>
+                <CopyToClipboard text={roomid} style={{marginBottom: "2rem"}}>
+                    <Button className="Copy" variant="contained" color="primary" startIcon={<AssignmentIcon fontSize="medium" />}>
+                    Copy Room ID
+                    </Button>
+                </CopyToClipboard>
     </Col>
   </Row>
   <div>

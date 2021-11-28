@@ -63,6 +63,22 @@ app.get("/api/getFromRoomId/:roomId", async (req, res) => {
       console.log(error);
     }
   });
+  app.get("/api/gethighestscore/:username", async (req, res) => {
+    try {
+      const username = req.params.username;
+      console.log(username);
+      let pool = await query(`SELECT * FROM skribbl WHERE UserName = '${username}'`, (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log("hii");
+          console.log(result);
+          res.send(result);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
 app.post("/api/login", async (req, res) => {
   try {
@@ -113,16 +129,58 @@ app.post("/api/updateroomid/:databaseid", async (req, res) => {
     // console.log(roomId);
     try {
       let pool = await query(
-            `UPDATE skribbl SET roomid = '${roomId}' WHERE Id=${databaseId}`,
+            `UPDATE skribbl SET roomid='${roomId}' WHERE Id=${databaseId}`,
           (err, result) => {
             if (err) {
-              console.log("err");
+              console.log(err);
             }
             console.log(result);
           }
         );
     } catch (error) {
-      console.log("error");
+      console.log(error);
+    }
+  });
+
+  //update high score
+  app.post("/api/updatepoints/:username/:points", async (req, res) => {
+    // console.log("hiiiii");
+    const points = req.params.points;
+    const username=req.params.username;
+
+    // console.log(roomId);
+    try {
+      let pool = await query(
+            `UPDATE skribbl SET highestscore='${points}' WHERE UserName=${username}`,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log(result);
+          }
+        );
+    } 
+    catch (error) {
+      console.log(error);
+    }
+  });
+
+  app.post("/api/updatetotalgames/:databaseid", async (req, res) => {
+    // console.log("hiiiii");
+    const databaseId = req.params.databaseid;
+    // console.log(roomId);
+    try {
+      let pool = await query(
+            `UPDATE skribbl SET Totalgamesplayed = Totalgamesplayed+1 WHERE Id=${databaseId}`,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log(result);
+          }
+        );
+    } catch (error) {
+      console.log(error);
     }
   });
   
@@ -139,7 +197,6 @@ app.delete("/api/delete/:Id", async (req, res) => {
         }
       });
   } catch (error) {
-    console.log("error");
+    console.log(error);
   }
 });
-
