@@ -54,7 +54,8 @@ const Chat = ({Time,word,gameSocket,chatLock,changePoints, setChatlock}) => {
         socket.on("Updated points", (transitString,newPoint) => {
             console.log(newPoint);
             Axios.get(`http://localhost:3002/api/gethighestscore/${username}`).then((data) => {
-                            if(data.data.Highestscore < newPoint){
+                console.log(data);
+                            if(data.data[0].Highestscore < newPoint){
                                 Axios.post(`http://localhost:3002/api/updatepoints/${username}/${newPoint}`);
                             }
                 });

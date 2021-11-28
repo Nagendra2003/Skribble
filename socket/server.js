@@ -151,7 +151,7 @@ app.post("/api/updateroomid/:databaseid", async (req, res) => {
     // console.log(roomId);
     try {
       let pool = await query(
-            `UPDATE skribbl SET Highestscore='${points}' WHERE UserName=${username}`,
+            `UPDATE skribbl SET Highestscore=${points} WHERE UserName='${username}'`,
           (err, result) => {
             if (err) {
               console.log(err);

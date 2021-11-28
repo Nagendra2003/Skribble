@@ -17,6 +17,8 @@ const InitialPage = () => {
     const [roomId, setRoomId] = useState("");
     const history = useHistory();
     const {username,databaseid} = useParams();
+    const [showGlobalboard,setShowGlobalboard]=useState(false);
+    const [alldata,setAlldata]=useState([]);
 
     useEffect(() => {
         lobbySocket = io("http://127.0.0.1:5000",{ transports: [ "websocket" ],query:{userName:username}});
@@ -63,6 +65,18 @@ const InitialPage = () => {
         },200);
         
     }
+    const handleBoard=(e)=>{
+        Axios.get(`http://localhost:3002/api/get`).then((data) => {
+            console.log(data);
+            data.data.length>0 && data.data.map((datum,index)=>{
+                console.log('hii');
+                console.log(datum);
+                setAlldata((prevState) => [...prevState, datum]);
+            })
+            console.log(alldata);
+        })
+        setShowGlobalboard(true);
+    }
 
     return (
         <div className="initial-page">
@@ -89,6 +103,17 @@ const InitialPage = () => {
         <div className ="user-info">
             <h3>Your Stats</h3>
             <Stats/>
+        </div>
+        <div>
+            {!showGlobalboard && <Button variant="primary" onClick={handleBoard}> Show Global Leaderboard</Button>}
+            {showGlobalboard && (
+                <ul>
+                    {alldata.length>0 && alldata.map((data,index) => {
+                        <li>{data.UserName} : {data.Highestscore}</li>
+                    }
+                    )}
+                </ul>
+            )}
         </div>
         </div>
     );
