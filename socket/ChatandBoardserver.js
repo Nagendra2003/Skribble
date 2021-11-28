@@ -20,7 +20,6 @@ http.listen(server_port,()=>{
 //For storing uids corresponding to a client
 const userSocketidMap = new Map();
 const users = {}
-const socketToRoom = {}
 
 
 io.on("connection",(socket) => {
@@ -45,9 +44,6 @@ io.on("connection",(socket) => {
         else{
             users[room] = [socket.id];
         }
-    
-        socketToRoom[socket.id] = room;
-       
         //console.log(timeToRoom[room]);
         socket.join(room);
         console.log(room);
@@ -56,7 +52,7 @@ io.on("connection",(socket) => {
 
     socket.on("New Message", (message,roomid) => {
         io.to(roomid).emit("New Message", message);
-        
+
     });
 
     socket.on("canvas-data",(data,roomid)=>{

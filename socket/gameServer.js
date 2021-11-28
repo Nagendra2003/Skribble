@@ -150,21 +150,25 @@ io.on("connection", (socket) => {
         }
 
         socketToUserName[socket.id] = userName;
-        console.log(userName);
-        if (!timeToRoom[room] && timeToRoom[room]!=0 ){
-            startRound(room);
-            roundToRoom[room] = 1;
-            roundGoing[room] = true;
-        }
-
-        socketToRoom[socket.id] = room;
-       
+         
         //console.log(timeToRoom[room]);
         socket.emit("Time broadcast", timeToRoom[room]);
-        socket.emit("Round number")
+        socket.emit("Round number");
         socket.join(room);
-        console.log(room);
+        console.log("assigning room = ",room);
+        socketToRoom[socket.id] = room;
+        console.log("Joining = ",socketToRoom);
+        console.log("User = ",userName);
         io.to(room).emit("New user", roundToRoom[room]);
+        if (!timeToRoom[room] && timeToRoom[room]!=0 && users[room].length >=2 ){
+            console.log("starting rounds",socketToRoom[socket.id]);
+            let socketID = pickRandomUser(socketToRoom[socket.id]);
+            let wordList = pickRandomWords();
+            console.log(socket.id,socketID,socketToUserName[socket.id]);
+            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socketID]);
+            io.to(socketID).emit("Pick A Word", wordList);
+            roundToRoom[room] = 1;
+        }
 
     });
 
@@ -189,6 +193,7 @@ io.on("connection", (socket) => {
                 }
                 else{
                     setTimeout(() => {
+                        console.log("socketToRoom",socketToRoom);
                         let socketID = pickRandomUser(socketToRoom[socket.id]);
                         let wordList = pickRandomWords();
                         console.log(socket.id,socketID,socketToUserName[socket.id]);
@@ -197,11 +202,7 @@ io.on("connection", (socket) => {
                         
                     },2000);
                 }
-                // setTimeout(() => {
-                //     io.to(socketToRoom[socket.id]).emit("Starting next round");
-                //     roundGoing[socketToRoom[socket.id]] = true;
-                //     startRound(socketToRoom[socket.id]);
-                // },4000);
+               
             }
 
     },1000);
@@ -224,15 +225,16 @@ io.on("connection", (socket) => {
         }
         let newsocketToRoom = {}
         Object.keys(socketToRoom).map((keyName,keyNumber) => {
-            if (keyName != socket.id){
+            if (keyName !== socket.id){
                 newsocketToRoom[keyName] = socketToRoom[keyName];
             }
         });
 
+        console.log(newsocketToRoom);
         socketToRoom = newsocketToRoom;
 
         Object.keys(UserNameToSocket).map((keyName, keyNumber ) => {
-            if (keyName == socketToUserName[socket.id]){
+            if (keyName === socketToUserName[socket.id]){
                 let sockets = UserNameToSocket[keyName];
                 if (sockets){
                     sockets = sockets.filter( id => id !== socket.id);
@@ -243,7 +245,7 @@ io.on("connection", (socket) => {
 
         let newsocketToUsername = {}
         Object.keys(socketToUserName).map((keyName, keyNumber) => {
-            if (keyName != socket.id){
+            if (keyName !== socket.id){
                 newsocketToRoom[keyName] = socketToUserName[keyName];
             }
         });
