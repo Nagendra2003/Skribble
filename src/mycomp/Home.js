@@ -18,7 +18,8 @@ const InitialPage = () => {
     const history = useHistory();
     const {username,databaseid} = useParams();
     const [showGlobalboard,setShowGlobalboard]=useState(false);
-    const [alldata,setAlldata]=useState([]);
+    const [alluser,setAlluser]=useState([]);
+    const [allscores,setscores]=useState([]);
 
     useEffect(() => {
         lobbySocket = io("http://127.0.0.1:5000",{ transports: [ "websocket" ],query:{userName:username}});
@@ -66,18 +67,17 @@ const InitialPage = () => {
         
     }
     const handleBoard=(e)=>{
+        e.preventDefault();
         Axios.get(`http://localhost:3002/api/get`).then((data) => {
             console.log(data);
-            data.data.length>0 && data.data.map((datum,index)=>{
-                console.log('hii');
-                console.log(datum);
-                setAlldata((prevState) => [...prevState, datum]);
+            // setAlldata(data.data);
+            
+            data.data.map((datum,index) => {
+                setAlluser((prevState) => [...prevState,datum.UserName]);
+                setscores((prevState) => [...prevState,datum.Highestscore]);
             })
-            // console.log(alldata);
-        })
-        setTimeout(() => {
-            console.log(alldata);
-        },4000)
+            
+        });
         setShowGlobalboard(true);
     }
 
@@ -109,14 +109,20 @@ const InitialPage = () => {
         </div>
         <div>
             {!showGlobalboard && <Button variant="primary" onClick={handleBoard}> Show Global Leaderboard</Button>}
-            {showGlobalboard &&  (
+            {showGlobalboard && 
+            <div>
                 <ul>
-                    {alldata.length>0 && alldata.map((data,index) => {
-                        <li>{data.UserName} : {data.Highestscore}</li>
+                    {/* {/* {console.log(alldata)} */}
+                    {/* {alluser.sort(function(a, b){return allscores[alluser.indexOf(a)] - allscores[alluser.indexOf(b)]})} */}
+                    {/* {allscores=allscores.reverse()} */}
+                    {alluser.length>0 && alluser.map((datum,index) => {
+                        return(
+                        <li>{alluser[index]}:{allscores[index]}</li>
+                        )
                     }
                     )}
                 </ul>
-            )
+            </div>
             }
         </div>
         </div>
