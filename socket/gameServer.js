@@ -100,7 +100,7 @@ var x = setInterval(function() {
 },1000);
 
 let startRound = (room) => {
-    timeToRoom[room] = 10;
+    timeToRoom[room] = 30;
 };
 
 let pickRandomUser = (room) => {
