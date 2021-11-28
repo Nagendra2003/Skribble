@@ -31,6 +31,7 @@ const Lobby = () => {
     const [ showWordList, setShowWordList ] = useState(false);
     const [ choseWord, setChoseWord ] = useState(false);
     const [ choosenWord, setChoosenWord ] = useState("");
+    const [ chatLock, setChatlock ] = useState(false);
 
     useEffect(() => {
         
@@ -60,19 +61,25 @@ const Lobby = () => {
 
         gameSocket.on("User picking word", (userName) => {
             setPicker(userName);
-            if (userName !== username)
+            if (userName !== username){
                 setBoardLock(true);
+                setShowWordList(false);
+                setChatlock(false);
+            }
         });
 
         gameSocket.on("Pick A Word", (wordList) => {
             setWordList(wordList);
             setShowWordList(true);
+            
         });
 
     },[gameSocket])
 
     const handleChoseWord = (word) => {
         gameSocket.emit("Chose word", word);
+        setChatlock(true);
+        setBoardLock(false);
     }
 
     return (
@@ -161,7 +168,7 @@ const Lobby = () => {
         <span className="overflow-auto" id="chat-section">
                 <Chat 
                     gameSocket={gameSocket}
-                  
+                    chatLock={chatLock}
                 />
         </span>
     </Col>

@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 var socket = null;
 
-const Chat = ({Socket}) => {
+const Chat = ({chatLock}) => {
     
     const {roomid,username} = useParams();
     const [messages, setMessages] = useState([]);
@@ -79,12 +79,15 @@ const Chat = ({Socket}) => {
                  <div style={{ float: 'left', clear: 'both' }} ref={messagesEnd} />
                 <span>
                     <input required
+                    disabled={chatLock}
                     value= {value}
                     onChange={(e)=>{setValue(e.target.value)}}
                     >
                     </input>
                 <Button variant="primary"
-                    onClick={handleSubmit}
+                   
+                    disabled={chatLock}
+                    onClick={() => { handleSubmit();}}
                     >
                     Send
                     </Button>

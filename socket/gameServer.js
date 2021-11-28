@@ -16,7 +16,7 @@ let users = {}
 let socketToRoom = {}
 let roundToRoom = {}
 let timeToRoom = {}
-let maxRounds = 2
+let maxRounds = 4
 let roundGoing = {}
 let UserNameToSocket = {}
 let socketToUserName = {}
@@ -191,11 +191,10 @@ io.on("connection", (socket) => {
                     setTimeout(() => {
                         let socketID = pickRandomUser(socketToRoom[socket.id]);
                         let wordList = pickRandomWords();
-                        if (socket.id == socketID){
-                            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socket.id]);
-                            console.log(socketToUserName[socket.id]);
-                            socket.emit("Pick A Word", wordList);
-                        }
+                        console.log(socket.id,socketID,socketToUserName[socket.id]);
+                        io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socketID]);
+                        io.to(socketID).emit("Pick A Word", wordList);
+                        
                     },2000);
                 }
                 // setTimeout(() => {
