@@ -29,7 +29,7 @@ export default function Login({ setToken }) {
 
     return (
         <div className="CreateUser">
-            <button class="btn-btn-blue" onClick={handleRegister}>Register</button>
+            <button className="btn-btn-blue" onClick={handleRegister}>Register</button>
             <form action="" className="uploadUser" onSubmit={handleSubmit}>
             <h1 >Login Form</h1> 
                 <label>Username: </label>
