@@ -73,8 +73,11 @@ const InitialPage = () => {
                 console.log(datum);
                 setAlldata((prevState) => [...prevState, datum]);
             })
-            console.log(alldata);
+            // console.log(alldata);
         })
+        setTimeout(() => {
+            console.log(alldata);
+        },4000)
         setShowGlobalboard(true);
     }
 
@@ -106,14 +109,15 @@ const InitialPage = () => {
         </div>
         <div>
             {!showGlobalboard && <Button variant="primary" onClick={handleBoard}> Show Global Leaderboard</Button>}
-            {showGlobalboard && (
+            {showGlobalboard &&  (
                 <ul>
                     {alldata.length>0 && alldata.map((data,index) => {
                         <li>{data.UserName} : {data.Highestscore}</li>
                     }
                     )}
                 </ul>
-            )}
+            )
+            }
         </div>
         </div>
     );

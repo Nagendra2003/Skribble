@@ -17,6 +17,8 @@ import './lobby.css';
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import { ListGroup, Card, Navbar, Nav } from 'react-bootstrap';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import Peer from 'simple-peer';
+import Video from '../mycomp/video_call';
 
 var gameSocket = null;
 
@@ -133,12 +135,14 @@ const Lobby = () => {
     return (
     <div className="lobby">
     <Container className="Skribbl"></Container>
-    <CopyToClipboard text={roomid}>
-                    <Button  style={{marginTop:"-10vh"}} variant="contained" color="primary" startIcon={<AssignmentIcon fontSize="medium" />}>
+                <CopyToClipboard text={roomid}>
+                    <Button  style={{marginTop:"-15vh",marginLeft:"1000px"}} svariant="contained" color="primary" startIcon={<AssignmentIcon fontSize="medium" />}>
                     Copy Room ID
                     </Button>
                 </CopyToClipboard>
-            {!gameOver ? `Round: ${roundNumber}` : "Game Over"}
+                <Button  style={{marginTop:"-15vh",marginLeft:"20px"}} svariant="contained" color="primary" startIcon={<AssignmentIcon fontSize="medium" />}>
+                    {!gameOver ? `Round: ${roundNumber}` : "Game Over"}
+                </Button>
     <Container fluid="md" >
                 
     <Row >
@@ -197,7 +201,7 @@ const Lobby = () => {
             </span>
         </span>
     </Col>
-    <Col  xs={6} >
+    <Col  style={{marginTop:"-7vh"}} xs={6} >
         <span className="Board">
             <div>
                  <span className="color-picker-container" style={{color:"red"}}>
@@ -231,7 +235,7 @@ const Lobby = () => {
                  </div>
          </span>
     </Col>
-    <Col style={{marginTop:"1vh"}}>
+    <Col style={{marginTop:"-3vh"}}>
         <span className="overflow-auto" id="chat-section">
                 
                 <h2>Chat</h2>
@@ -248,6 +252,7 @@ const Lobby = () => {
                 
     </Col>
   </Row>
+  <Video username={username}/>
   <div>
 
   </div>
