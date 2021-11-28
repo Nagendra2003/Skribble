@@ -19,7 +19,7 @@ let timeToRoom = {}
 let maxRounds = 4
 let roundGoing = {}
 let UserNameToSocket = {}
-let socketToUserName = {}
+let socketToUserName = new Map();
 let words = [
     "America",
     "Balloon",
@@ -149,7 +149,7 @@ io.on("connection", (socket) => {
             UserNameToSocket[userName] = [socket.id];
         }
 
-        socketToUserName[socket.id] = userName;
+        socketToUserName.set(socket.id, userName);
          
         //console.log(timeToRoom[room]);
         socket.emit("Time broadcast", timeToRoom[room]);
@@ -159,13 +159,15 @@ io.on("connection", (socket) => {
         socketToRoom[socket.id] = room;
         console.log("Joining = ",socketToRoom);
         console.log("User = ",userName);
-        io.to(room).emit("New user", roundToRoom[room]);
+        console.log(socketToUserName);
+        
+        io.to(room).emit("New user", users[room], Array.from(socketToUserName));
         if (!timeToRoom[room] && timeToRoom[room]!=0 && users[room].length >=2 ){
             console.log("starting rounds",socketToRoom[socket.id]);
             let socketID = pickRandomUser(socketToRoom[socket.id]);
             let wordList = pickRandomWords();
-            console.log(socket.id,socketID,socketToUserName[socket.id]);
-            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socketID]);
+            console.log(socket.id,socketID,socketToUserName.get(socket.id));
+            io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName.get(socketID));
             io.to(socketID).emit("Pick A Word", wordList);
             roundToRoom[room] = 1;
         }
@@ -191,13 +193,14 @@ io.on("connection", (socket) => {
                     console.log("max rounds reached");
                     return;
                 }
-                else{
+                else if (users[room].length >=2) {
+                    
                     setTimeout(() => {
                         console.log("socketToRoom",socketToRoom);
                         let socketID = pickRandomUser(socketToRoom[socket.id]);
                         let wordList = pickRandomWords();
-                        console.log(socket.id,socketID,socketToUserName[socket.id]);
-                        io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName[socketID]);
+                        console.log(socket.id,socketID,socketToUserName.get(socket.id));
+                        io.to(socketToRoom[socket.id]).emit("User picking word", socketToUserName.get(socketID));
                         io.to(socketID).emit("Pick A Word", wordList);
                         
                     },2000);
@@ -209,7 +212,7 @@ io.on("connection", (socket) => {
 
     socket.on("Chose word", (word) => {
         console.log(word);
-        io.to(socketToRoom[socket.id]).emit("User is drawing", socketToUserName[socket.id], word);
+        io.to(socketToRoom[socket.id]).emit("User is drawing", socketToUserName.get(socket.id), word);
         
         roundGoing[socketToRoom[socket.id]] = true;
         startRound(socketToRoom[socket.id]);
@@ -234,7 +237,7 @@ io.on("connection", (socket) => {
         socketToRoom = newsocketToRoom;
 
         Object.keys(UserNameToSocket).map((keyName, keyNumber ) => {
-            if (keyName === socketToUserName[socket.id]){
+            if (keyName == socketToUserName.get(socket.id)){
                 let sockets = UserNameToSocket[keyName];
                 if (sockets){
                     sockets = sockets.filter( id => id !== socket.id);
@@ -243,17 +246,12 @@ io.on("connection", (socket) => {
             }
         });
 
-        let newsocketToUsername = {}
-        Object.keys(socketToUserName).map((keyName, keyNumber) => {
-            if (keyName !== socket.id){
-                newsocketToRoom[keyName] = socketToUserName[keyName];
-            }
-        });
-
-        socketToUserName = newsocketToUsername;
-
-
-        io.to(roomid).emit("User disconnected", socket.id);
+        
+        socketToUserName.delete(socket.id);
+        console.log("socketToUserName", socketToUserName);
+        
+        io.to(roomid).emit("User disconnected", room, Array.from(socketToUserName));
+        console.log("After disconnection: ",room, socketToUserName);
     });
 
 });

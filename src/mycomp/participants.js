@@ -3,16 +3,15 @@ import Axios from "axios";
 import { useParams } from 'react-router';
 
 
-const Participants=()=>{
+const Participants=({users})=>{
     const {roomid,username} = useParams();
-    const [alluser,setAllusers]=useState([])
-
+    
     useEffect(() => {
-      console.log("xxxxxxx");
-      console.log(roomid);
-      Axios.get(`http://localhost:3002/api/getFromRoomId/${roomid}`).then((data) => {
-      console.log(data);
-      setAllusers(data.data);
+      
+      // console.log(roomid);
+      // Axios.get(`http://localhost:3002/api/getFromRoomId/${roomid}`).then((data) => {
+      // console.log(data);
+      
     //   setUser({
     //     Password: data.data[0].Password,
     //     Name: data.data[0].Name,
@@ -23,14 +22,14 @@ const Participants=()=>{
     //   setUserName(data.data[0].UserName);
     //   setPassword(data.data[0].Password);
     //   setName(data.data[0].Name);
-    });
+  
     // setShowUpdateForm(false);
   },[]);
     
     return(
         <div>
             <h2>Participants</h2>
-            {alluser.length>0 && alluser.map((user,index) => {
+            {users.length>0 && users.map((user,index) => {
               return(
               <p key={index}>{user.UserName}</p>
               )})}

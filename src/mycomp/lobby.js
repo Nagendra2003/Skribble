@@ -36,6 +36,8 @@ const Lobby = () => {
     const [ gameOver, setGameOver ] = useState(false);
     const [ drawing, setDrawing ] = useState(false);
     const [ correctWord, setCorrectWord ] = useState("");
+    const [ users, setUsers ] = useState([]);
+    const [ socketToUsername, setSocketToUsername ] = useState(new Map());
 
     useEffect(() => {
         
@@ -46,6 +48,13 @@ const Lobby = () => {
             console.log("time received",time);
         })
 
+        gameSocket.on("New user", (users, transitString) => {
+            console.log("Users");
+            setUsers(users);
+            let newMap = new Map(Array.from(transitString));
+            console.log(newMap);
+            setSocketToUsername(newMap);
+        })
         return () => {
             gameSocket.disconnect();
           
@@ -65,6 +74,7 @@ const Lobby = () => {
 
         gameSocket.on("User picking word", (userName) => {
             setPicker(userName);
+            
             if (userName !== username){
                 setBoardLock(true);
                 setShowWordList(false);
@@ -88,7 +98,16 @@ const Lobby = () => {
             setTimeUp(false);
         });
 
-    },[gameSocket])
+        gameSocket.on("User disconnected", (users, transitString) => {
+            console.log("Disconnected users");
+            console.log(socketToUsername);
+            setUsers(users);
+            let newMap = new Map(Array.from(transitString));
+            console.log(newMap);
+            setSocketToUsername(newMap);
+        });
+
+    },[gameSocket, users])
 
     const handleChoseWord = (word) => {
         gameSocket.emit("Chose word", word);
@@ -141,7 +160,13 @@ const Lobby = () => {
                     {gameOver && <h4>Game Over</h4>}
                     </span>
                 <div className="Participants">
-                    <Participants/>
+                    <div>
+                    <h2>Participants</h2>
+                    {users.length>0 && users.map((user,index) => {
+                    return(
+                    <p key={index}>{socketToUsername.get(user)}</p>
+                    )})}
+                    </div>
                 </div>
                 </div>
             </span>
